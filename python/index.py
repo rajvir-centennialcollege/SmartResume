@@ -7,15 +7,17 @@ Created on Wed Apr  3 16:41:07 2019
 
 import PyPDF2
 import re
+import predict
 
 class GetPDF:
-    pdfPath   = ""
-    pdf       = ""
-    numPages  = 0
-    content   = set()
-    links     = set()
-    phonenum  = set()
-    email     = set()
+    pdfPath     = ""
+    pdf         = ""
+    numPages    = 0
+    content     = set()
+    links       = set()
+    phonenum    = set()
+    email       = set()
+    pointScored = []
     
     def __init__(self, pdfPath):
         self.pdfPath = pdfPath
@@ -32,17 +34,21 @@ class GetPDF:
 #        ------------------ EXTRACTING TEXT FROM PDF
         
     def extractText(self):
-        for i in range(len(self.content)):   
+#        print(predict.predict("hello"))
+        for i in range(len(self.content)):
             lines = list(self.content)[i]
             lines = lines.split('\n')
             for i in lines:
-#                print(">>>> " + i)
-                if len(self.FindEmail(i)) != 0:
-                    self.setemail(i)
-                
-                if len(self.FindURL(i)) != 0:
-                    print("=> " + i)
-                    self.setLinks(i)
+                i = i.strip()
+                if len(i) > 0:
+                    points = predict.predict(i)
+                    self.setPoints(points)
+                    if len(self.FindEmail(i)) != 0:
+                        self.setemail(i)
+                    
+                    if len(self.FindURL(i)) != 0:
+    #                    print("=> " + i)
+                        self.setLinks(i)
                     
         print(self.getemail())
         print(self.getLink())
@@ -66,13 +72,13 @@ class GetPDF:
         return self.numPages
     
     def setContent(self, content):
-        self.content.add(content)
+        self.content.add(content.strip())
     
     def getContent(self):
         return self.content
     
     def setLinks(self, link):
-        self.links.add(link)
+        self.links.add(link.strip())
     
     def getLink(self):
         return self.links
@@ -82,15 +88,16 @@ class GetPDF:
     
     def getemail(self):
         return self.email
-
+    
+    def setPoints(self, points):
+        self.pointScored.append(points)
+    
+    def getPoint(self):
+        return self.pointScored
+    
+    
 def Main():
-    pdfPath = "Sample/sample3.pdf"
-     
-#    a = set()
-#    a.add(2)
-#    a.add(5)
-#    a.add(2)
-#    print(list(a)[0])
+    pdfPath = "Sample/sample4.pdf"
     
     pdfObj = GetPDF(pdfPath)
 
