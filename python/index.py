@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-a
 """
 Created on Wed Apr  3 16:41:07 2019
 
@@ -12,10 +12,10 @@ class GetPDF:
     pdfPath   = ""
     pdf       = ""
     numPages  = 0
-    content   = []
-    links     = []
-    phonenum  = []
-    email     = [] 
+    content   = set()
+    links     = set()
+    phonenum  = set()
+    email     = set()
     
     def __init__(self, pdfPath):
         self.pdfPath = pdfPath
@@ -32,22 +32,26 @@ class GetPDF:
 #        ------------------ EXTRACTING TEXT FROM PDF
         
     def extractText(self):
-        lines = self.content[0]
-        lines = lines.split('\n')
-        for i in lines:
-            if len(self.FindEmail(i)) != 0:
-                self.setemail(i)
-            
-            if len(self.FindURL(i)) != 0:
-                self.setLinks(i)
+        for i in range(len(self.content)):   
+            lines = list(self.content)[i]
+            lines = lines.split('\n')
+            for i in lines:
+#                print(">>>> " + i)
+                if len(self.FindEmail(i)) != 0:
+                    self.setemail(i)
                 
+                if len(self.FindURL(i)) != 0:
+                    print("=> " + i)
+                    self.setLinks(i)
+                    
         print(self.getemail())
         print(self.getLink())
     
 #    ---------------- REGULAR EXPRESSSION FOR URL AND EMAIL
         
     def FindURL(self, string):  
-        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string) 
+        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string)
+#        url = re.findall("[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)", string) 
         return url 
     
     def FindEmail(self, string):
@@ -62,26 +66,32 @@ class GetPDF:
         return self.numPages
     
     def setContent(self, content):
-        self.content.append(content)
+        self.content.add(content)
     
     def getContent(self):
         return self.content
     
     def setLinks(self, link):
-        self.links.append(link)
+        self.links.add(link)
     
     def getLink(self):
         return self.links
     
     def setemail(self, email):
-        self.email.append(email)
+        self.email.add(email.strip())
     
     def getemail(self):
         return self.email
 
 def Main():
-    pdfPath = "Sample/sample4.pdf"
+    pdfPath = "Sample/sample3.pdf"
      
+#    a = set()
+#    a.add(2)
+#    a.add(5)
+#    a.add(2)
+#    print(list(a)[0])
+    
     pdfObj = GetPDF(pdfPath)
 
     
