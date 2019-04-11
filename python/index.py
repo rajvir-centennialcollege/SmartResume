@@ -8,6 +8,7 @@ Created on Wed Apr  3 16:41:07 2019
 import PyPDF2
 import re
 import predict
+import numpy as np
 
 class GetPDF:
     pdfPath     = ""
@@ -18,6 +19,7 @@ class GetPDF:
     phonenum    = set()
     email       = set()
     pointScored = []
+    
     
     def __init__(self, pdfPath):
         self.pdfPath = pdfPath
@@ -34,15 +36,16 @@ class GetPDF:
 #        ------------------ EXTRACTING TEXT FROM PDF
         
     def extractText(self):
-#        print(predict.predict("hello"))
         for i in range(len(self.content)):
             lines = list(self.content)[i]
             lines = lines.split('\n')
             for i in lines:
                 i = i.strip()
                 if len(i) > 0:
+                    print(i)
                     points = predict.predict(i)
-                    self.setPoints(points)
+                    print(points)
+                    self.setPoints(points[0])
                     if len(self.FindEmail(i)) != 0:
                         self.setemail(i)
                     
@@ -52,6 +55,7 @@ class GetPDF:
                     
         print(self.getemail())
         print(self.getLink())
+        self.pointMaker()
     
 #    ---------------- REGULAR EXPRESSSION FOR URL AND EMAIL
         
@@ -63,6 +67,18 @@ class GetPDF:
     def FindEmail(self, string):
         emails = re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", string)
         return emails
+    
+    def pointMaker(self):
+        if self.getNumPages() == 1:
+            self.setPoints(2)
+        elif self.getNumPages() == 2:
+            self.setPoints(1)
+            
+        if(len(self.getemail()) > 0):
+            self.setPoints(1)
+            
+        if(len(self.getContent()) > 1):
+            self.setPoints(1)
     
 #    -------------- GETTER SETTER OF CLASS
     def setNumPages(self, numPages):
@@ -93,13 +109,14 @@ class GetPDF:
         self.pointScored.append(points)
     
     def getPoint(self):
-        return self.pointScored
+        return np.sum(self.pointScored)
     
     
 def Main():
-    pdfPath = "Sample/sample4.pdf"
+    pdfPath = "Sample/sample2.pdf"
     
     pdfObj = GetPDF(pdfPath)
+    print(pdfObj.getPoint())
 
     
 if __name__ == '__main__':
