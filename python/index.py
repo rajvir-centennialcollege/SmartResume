@@ -10,6 +10,9 @@ import re
 import predict
 import numpy as np
 
+from os import listdir
+from os.path import isfile, join
+
 class GetPDF:
     pdfPath     = ""
     pdf         = ""
@@ -22,16 +25,21 @@ class GetPDF:
     
     
     def __init__(self, pdfPath):
+    
+        files = [f for f in listdir(pdfPath) if isfile(join(pdfPath, f))]
         self.pdfPath = pdfPath
+        for i in files:
+            filePath = pdfPath + '/'+ str(i)
 #        -------------- READING AND SETTING VALUES
-        with open(pdfPath,'rb') as pdfObj:
-            pdfReader = PyPDF2.PdfFileReader(pdfObj)
-            self.setNumPages(pdfReader.numPages)
-            
-            for i in range(self.getNumPages()):
-                self.setContent(pdfReader.getPage(i).extractText())
+            with open(filePath,'rb') as pdfObj:
+                pdfReader = PyPDF2.PdfFileReader(pdfObj)
+                print("===============" + " WORKING ON " + i + " ===============")
+                self.setNumPages(pdfReader.numPages)
                 
-            self.extractText()
+                for i in range(self.getNumPages()):
+                    self.setContent(pdfReader.getPage(i).extractText())
+                    
+                self.extractText()
        
 #        ------------------ EXTRACTING TEXT FROM PDF
         
@@ -113,10 +121,10 @@ class GetPDF:
     
     
 def Main():
-    pdfPath = "Sample/sample2.pdf"
+    pdfPath = "Sample"
     
     pdfObj = GetPDF(pdfPath)
-    print(pdfObj.getPoint())
+#    print(pdfObj.getPoint())
 
     
 if __name__ == '__main__':
