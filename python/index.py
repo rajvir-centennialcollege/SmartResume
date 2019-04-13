@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-a
 """
 Created on Wed Apr  3 16:41:07 2019
 
@@ -7,15 +7,19 @@ Created on Wed Apr  3 16:41:07 2019
 
 import PyPDF2
 import re
+import predict
+import numpy as np
 
 class GetPDF:
-    pdfPath   = ""
-    pdf       = ""
-    numPages  = 0
-    content   = []
-    links     = []
-    phonenum  = []
-    email     = [] 
+    pdfPath     = ""
+    pdf         = ""
+    numPages    = 0
+    content     = set()
+    links       = set()
+    phonenum    = set()
+    email       = set()
+    pointScored = []
+    
     
     def __init__(self, pdfPath):
         self.pdfPath = pdfPath
@@ -32,27 +36,49 @@ class GetPDF:
 #        ------------------ EXTRACTING TEXT FROM PDF
         
     def extractText(self):
-        lines = self.content[0]
-        lines = lines.split('\n')
-        for i in lines:
-            if len(self.FindEmail(i)) != 0:
-                self.setemail(i)
-            
-            if len(self.FindURL(i)) != 0:
-                self.setLinks(i)
-                
+        for i in range(len(self.content)):
+            lines = list(self.content)[i]
+            lines = lines.split('\n')
+            for i in lines:
+                i = i.strip()
+                if len(i) > 0:
+                    print(i)
+                    points = predict.predict(i)
+                    print(points)
+                    self.setPoints(points[0])
+                    if len(self.FindEmail(i)) != 0:
+                        self.setemail(i)
+                    
+                    if len(self.FindURL(i)) != 0:
+    #                    print("=> " + i)
+                        self.setLinks(i)
+                    
         print(self.getemail())
         print(self.getLink())
+        self.pointMaker()
     
 #    ---------------- REGULAR EXPRESSSION FOR URL AND EMAIL
         
     def FindURL(self, string):  
-        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string) 
+        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string)
+#        url = re.findall("[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)", string) 
         return url 
     
     def FindEmail(self, string):
         emails = re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", string)
         return emails
+    
+    def pointMaker(self):
+        if self.getNumPages() == 1:
+            self.setPoints(2)
+        elif self.getNumPages() == 2:
+            self.setPoints(1)
+            
+        if(len(self.getemail()) > 0):
+            self.setPoints(1)
+            
+        if(len(self.getContent()) > 1):
+            self.setPoints(1)
     
 #    -------------- GETTER SETTER OF CLASS
     def setNumPages(self, numPages):
@@ -62,27 +88,35 @@ class GetPDF:
         return self.numPages
     
     def setContent(self, content):
-        self.content.append(content)
+        self.content.add(content.strip())
     
     def getContent(self):
         return self.content
     
     def setLinks(self, link):
-        self.links.append(link)
+        self.links.add(link.strip())
     
     def getLink(self):
         return self.links
     
     def setemail(self, email):
-        self.email.append(email)
+        self.email.add(email.strip())
     
     def getemail(self):
         return self.email
-
+    
+    def setPoints(self, points):
+        self.pointScored.append(points)
+    
+    def getPoint(self):
+        return np.sum(self.pointScored)
+    
+    
 def Main():
-    pdfPath = "Sample/sample4.pdf"
-     
+    pdfPath = "Sample/sample2.pdf"
+    
     pdfObj = GetPDF(pdfPath)
+    print(pdfObj.getPoint())
 
     
 if __name__ == '__main__':
