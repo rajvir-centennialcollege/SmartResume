@@ -76,6 +76,7 @@ class GetPDF:
         emails = re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", string)
         return emails
     
+    
     def pointMaker(self):
         if self.getNumPages() == 1:
             self.setPoints(2)
