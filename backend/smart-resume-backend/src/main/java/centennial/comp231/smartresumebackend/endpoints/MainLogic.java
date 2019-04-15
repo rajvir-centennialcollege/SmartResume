@@ -4,14 +4,12 @@ import centennial.comp231.smartresumebackend.POJO.CandidateProfile;
 import centennial.comp231.smartresumebackend.POJO.RegistrationInfo;
 import centennial.comp231.smartresumebackend.POJO.Response;
 import com.google.gson.Gson;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class MainLogic {
 
@@ -19,7 +17,7 @@ public class MainLogic {
     Map<String, CandidateProfile> candidateProfileMap = new HashMap<>();
     Gson gson = new Gson();
 
-    @RequestMapping(value = "/candidateregister", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerCandidate(@RequestBody String payload) {
         RegistrationInfo registrationInfo = gson.fromJson(payload, RegistrationInfo.class);
         if (userMap.containsKey(registrationInfo.getEmail())) {
@@ -32,13 +30,13 @@ public class MainLogic {
         }
     }
 
-    @RequestMapping(value = "/candidatelogin", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginCandidate(@RequestBody String payload) {
         RegistrationInfo loginInfo = gson.fromJson(payload, RegistrationInfo.class);
         if (userMap.containsKey(loginInfo.getEmail())) {
             RegistrationInfo user = userMap.get(loginInfo.getEmail());
             if (user.getPassword().equals(loginInfo.getPassword())) {
-                Response response = new Response(null, "User: " + loginInfo.getEmail() + " login successful.");
+                Response response = new Response(user, "User: " + loginInfo.getEmail() + " login successful.");
                 return gson.toJson(response);
             } else {
                 Response response = new Response(null, "User: " + loginInfo.getEmail() + " provided incorrect password.");
