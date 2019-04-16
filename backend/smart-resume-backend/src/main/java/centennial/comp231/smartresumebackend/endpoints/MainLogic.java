@@ -81,6 +81,7 @@ public class MainLogic {
     public String updateProfile(@RequestBody String payload) {
         RegistrationInfo registrationInfo = gson.fromJson(payload, RegistrationInfo.class);
         CandidateProfile candidateProfile = gson.fromJson(payload, CandidateProfile.class);
+        candidateProfile.setEmail(registrationInfo.getEmail());
         if (userMap.containsKey(registrationInfo.getEmail())) {
             candidateProfileMap.put(registrationInfo.getEmail(), candidateProfile);
             Response response = new Response(candidateProfileMap.get(registrationInfo.getEmail()), "User: " + registrationInfo.getEmail() + "'s profile registered.");

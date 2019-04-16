@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 public class CandidateProfile {
 
+    private String email;
     private String name;
     private String address;
     private String phone;
@@ -11,6 +12,7 @@ public class CandidateProfile {
     private String score;
 
     public CandidateProfile() {
+        this.email = "";
         this.name = "";
         this.address = "";
         this.phone = "";
@@ -18,12 +20,21 @@ public class CandidateProfile {
         this.score = "0";
     }
 
-    public CandidateProfile(String name, String address, String phone, String resumeLink, String score) {
+    public CandidateProfile(String email, String name, String address, String phone, String resumeLink, String score) {
+        this.email = email;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.resumeLink = resumeLink;
         this.score = score;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {
@@ -73,6 +84,7 @@ public class CandidateProfile {
 
         CandidateProfile that = (CandidateProfile) o;
 
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
@@ -82,7 +94,8 @@ public class CandidateProfile {
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (resumeLink != null ? resumeLink.hashCode() : 0);
