@@ -1,1 +1,1 @@
-# SmartResume
+# Infinity Jobs
