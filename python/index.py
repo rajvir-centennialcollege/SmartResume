@@ -9,6 +9,7 @@ import PyPDF2
 import re
 import predict
 import numpy as np
+import json
 
 from os import listdir
 from os.path import isfile, join
@@ -22,7 +23,8 @@ class GetPDF:
     phonenum    = set()
     email       = set()
     pointScored = []
-    
+    finalScored = {}
+    fileName    = ""
     
     def __init__(self, pdfPath):
     
@@ -34,12 +36,15 @@ class GetPDF:
             with open(filePath,'rb') as pdfObj:
                 pdfReader = PyPDF2.PdfFileReader(pdfObj)
                 print("===============" + " WORKING ON " + i + " ===============")
+                self.fileName = i
                 self.setNumPages(pdfReader.numPages)
                 
                 for i in range(self.getNumPages()):
                     self.setContent(pdfReader.getPage(i).extractText())
                     
                 self.extractText()
+        with open('Result/result.json', 'w') as fp:
+            json.dump(self.finalScored, fp)
        
 #        ------------------ EXTRACTING TEXT FROM PDF
         
@@ -88,6 +93,13 @@ class GetPDF:
             
         if(len(self.getContent()) > 1):
             self.setPoints(1)
+            
+        self.exportJSON()
+            
+#    --------------- RELEASE TO JSON FILE
+            
+    def exportJSON(self):
+        self.finalScored[self.fileName] = self.getPoint()
     
 #    -------------- GETTER SETTER OF CLASS
     def setNumPages(self, numPages):
