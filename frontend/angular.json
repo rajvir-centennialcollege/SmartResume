@@ -26,7 +26,8 @@
               "src/styles.css",
                 "node_modules/primeicons/primeicons.css",
                 "node_modules/primeng/resources/themes/nova-light/theme.css",
-                "node_modules/primeng/resources/primeng.min.css"
+                "node_modules/primeng/resources/primeng.min.css",
+                "node_modules/primeflex/primeflex.css"
             ],
             "scripts": []
           },
@@ -82,7 +83,8 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/primeflex/primeflex.css"
             ],
             "scripts": [],
             "assets": [
