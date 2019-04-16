@@ -1,0 +1,12 @@
+Story Title,Estimate,Vote Started,Voting Duration,Avg Voting Time,Fastest,Slowest
+Scoring Resume,20,4/9/2019 17:26,0:00:27,0:00:12,Tduggal,Hardeep
+Python Scripting to encrypt the Submitted Resume,?,4/9/2019 17:25,0:00:33,0:00:19,Tduggal,Hardeep
+Backend-Restful APIs,40,4/9/2019 17:24,0:00:34,0:00:14,Tduggal,Hardeep
+FrontEnd-User Interface Version 1.0,40,4/9/2019 17:23,0:00:30,0:00:18,Tduggal,Hardeep
+Recruiter should be able to see the top shortlisted candidates,100,4/9/2019 17:22,0:01:01,0:00:37,Tduggal,Hardeep
+Recruiter should be able to post the job description,13,4/9/2019 17:20,0:01:47,0:01:37,Tduggal,Hardeep
+Candidate should be notified about the selection,100,4/9/2019 17:19,0:00:42,0:00:16,Tduggal,Hardeep
+Candidate should be able to view his applied jobs and status,13,4/9/2019 17:17,0:01:46,0:00:39,Tduggal,Hardeep
+Candidate should be able to apply for various job postings,20,4/9/2019 17:16,0:00:49,0:00:33,Tduggal,Hardeep
+Candidate should be able to upload his attachments to his profile,½,4/9/2019 17:16,0:00:30,0:00:13,Tduggal,Hardeep
+Candidate Should be able to create or manage his account,20,4/9/2019 17:15,0:01:00,0:00:20,Tduggal,Hardeep
