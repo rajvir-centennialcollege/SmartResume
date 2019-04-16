@@ -2,27 +2,28 @@ package centennial.comp231.smartresumebackend.POJO;
 
 import com.google.gson.Gson;
 
-import java.io.File;
-
 public class CandidateProfile {
 
     private String name;
     private String address;
     private String phone;
     private String resumeLink;
+    private String score;
 
     public CandidateProfile() {
         this.name = "";
         this.address = "";
         this.phone = "";
         this.resumeLink = null;
+        this.score = "0";
     }
 
-    public CandidateProfile(String name, String address, String phone, String resumeLink) {
+    public CandidateProfile(String name, String address, String phone, String resumeLink, String score) {
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.resumeLink = resumeLink;
+        this.score = score;
     }
 
     public String getName() {
@@ -57,6 +58,14 @@ public class CandidateProfile {
         this.resumeLink = resumeLink;
     }
 
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,7 +76,8 @@ public class CandidateProfile {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        return resumeLink != null ? resumeLink.equals(that.resumeLink) : that.resumeLink == null;
+        if (resumeLink != null ? !resumeLink.equals(that.resumeLink) : that.resumeLink != null) return false;
+        return score != null ? score.equals(that.score) : that.score == null;
     }
 
     @Override
@@ -76,6 +86,7 @@ public class CandidateProfile {
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (resumeLink != null ? resumeLink.hashCode() : 0);
+        result = 31 * result + (score != null ? score.hashCode() : 0);
         return result;
     }
 
